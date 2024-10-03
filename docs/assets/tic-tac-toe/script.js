@@ -29,11 +29,14 @@ function startGame() {
         cell.addEventListener('click', handleClick, { once: true });
     });
     setBoardHoverClass();
+    board.classList.remove('disabled');
 }
 
 function handleClick(e) {
+    if (circleTurn) return; // Prevent clicks during computer's turn
     const cell = e.target;
-    const currentClass = circleTurn ? CIRCLE_CLASS : X_CLASS;
+    if (cell.classList.contains(X_CLASS) || cell.classList.contains(CIRCLE_CLASS)) return; // Ignore clicks on occupied cells
+    const currentClass = X_CLASS;
     placeMark(cell, currentClass);
     if (checkWin(currentClass)) {
         endGame(false);
@@ -42,6 +45,8 @@ function handleClick(e) {
     } else {
         swapTurns();
         setBoardHoverClass();
+        board.classList.add('disabled');
+        setTimeout(computerMove, 500); // Add a slight delay for the computer's move
     }
 }
 
@@ -84,4 +89,22 @@ function checkWin(currentClass) {
             return cellElements[index].classList.contains(currentClass);
         });
     });
+}
+
+function computerMove() {
+    const availableCells = [...cellElements].filter(cell => {
+        return !cell.classList.contains(X_CLASS) && !cell.classList.contains(CIRCLE_CLASS);
+    });
+    if (availableCells.length === 0) return; // No moves left
+    const randomCell = availableCells[Math.floor(Math.random() * availableCells.length)];
+    placeMark(randomCell, CIRCLE_CLASS);
+    if (checkWin(CIRCLE_CLASS)) {
+        endGame(false);
+    } else if (isDraw()) {
+        endGame(true);
+    } else {
+        swapTurns();
+        setBoardHoverClass();
+        board.classList.remove('disabled');
+    }
 }

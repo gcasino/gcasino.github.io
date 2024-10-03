@@ -41,8 +41,16 @@ body {
   color: #0000ff;
 }
 
+.cell.x, .cell.circle {
+  cursor: not-allowed;
+}
+
 button {
   padding: 10px 20px;
   font-size: 1em;
   cursor: pointer;
+}
+
+.disabled {
+  pointer-events: none;
 }
