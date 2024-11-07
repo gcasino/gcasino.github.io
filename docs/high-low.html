@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>High or Low Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        .card {
+            display: inline-block;
+            width: 100px;
+            height: 150px;
+            border: 1px solid #000;
+            border-radius: 10px;
+            margin: 20px;
+            position: relative;
+            font-size: 2em;
+            background-color: white;
+        }
+        .card .top-left, .card .bottom-right {
+            position: absolute;
+            font-size: 0.5em;
+        }
+        .card .top-left {
+            top: 5px;
+            left: 5px;
+        }
+        .card .bottom-right {
+            bottom: 5px;
+            right: 5px;
+            transform: rotate(180deg);
+        }
+        .buttons {
+            margin: 20px;
+        }
+        .message {
+            font-size: 1.5em;
+            margin: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>High or Low Game</h1>
+    <div class="card" id="card1">
+        <div class="top-left" id="card1-top-left">?</div>
+        <div class="bottom-right" id="card1-bottom-right">?</div>
+    </div>
+    <div class="card" id="card2">
+        <div class="top-left" id="card2-top-left">?</div>
+        <div class="bottom-right" id="card2-bottom-right">?</div>
+    </div>
+    <div class="buttons">
+        <button onclick="guess('high')">High</button>
+        <button onclick="guess('low')">Low</button>
+    </div>
+    <div class="message" id="message"></div>
+    <button onclick="newGame()">New Game</button>
+
+    <script>
+        const suits = ['♠', '♥', '♦', '♣'];
+        const values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+
+        function getRandomCard() {
+            const suit = suits[Math.floor(Math.random() * suits.length)];
+            const value = values[Math.floor(Math.random() * values.length)];
+            return { suit, value, numericValue: values.indexOf(value) + 2 };
+        }
+
+        function newGame() {
+            card1 = getRandomCard();
+            card2 = getRandomCard();
+            document.getElementById('card1-top-left').textContent = `${card1.value}${card1.suit}`;
+            document.getElementById('card1-bottom-right').textContent = `${card1.value}${card1.suit}`;
+            document.getElementById('card2-top-left').textContent = '?';
+            document.getElementById('card2-bottom-right').textContent = '?';
+            document.getElementById('message').textContent = '';
+        }
+
+        function guess(choice) {
+            document.getElementById('card2-top-left').textContent = `${card2.value}${card2.suit}`;
+            document.getElementById('card2-bottom-right').textContent = `${card2.value}${card2.suit}`;
+            if ((choice === 'high' && card2.numericValue > card1.numericValue) || (choice === 'low' && card2.numericValue < card1.numericValue)) {
+                document.getElementById('message').textContent = 'You won!';
+            } else {
+                document.getElementById('message').textContent = 'You lost!';
+            }
+        }
+
+        // Start a new game when the page loads
+        newGame();
+    </script>
+</body>
+</html>
